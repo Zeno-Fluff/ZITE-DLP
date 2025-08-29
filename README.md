@@ -37,7 +37,7 @@ It supports multiple formats, includes debug diagnostics, and is designed to be 
 - Windows 10 or later
 - yt-dlp.exe (included)
 - ffmpeg.exe (included)
-- cookies.txt (needed for yt-dlp to work)
+- cookies.txt (it will import and replace them for you!)
 
 ---
 
