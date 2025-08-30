@@ -1,0 +1,28 @@
+@echo off
+setlocal enabledelayedexpansion
+
+
+set "basePath=%~dp0"
+
+
+set "ffmpegPath=%basePath%ffmpeg"
+set "cookiesFile=%basePath%cookies.txt"
+set "downloadDir=%basePath%downloaded"
+set "linkFile=%basePath%links.txt"
+set "ytDlpExe=%basePath%yt-dlp.exe"
+
+cd /d "%downloadDir%"
+
+
+for /f "usebackq delims=" %%A in ("%linkFile%") do (
+    "%ytDlpExe%" -x --no-part --no-continue --audio-format wav --ffmpeg-location "%ffmpegPath%" --cookies "%cookiesFile%" %%A
+)
+
+echo Converting WAV to OGG...
+for %%F in (*.wav) do (
+    "%ffmpegPath%\ffmpeg.exe" -i "%%F" "%%~nF.ogg"
+    del "%%F"
+)
+
+timeout /t 10 >nul
+exit
