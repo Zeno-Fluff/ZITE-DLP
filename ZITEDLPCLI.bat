@@ -12,7 +12,7 @@ echo \:::__\/ \__.::._\/\__.::.__\/\::::_\/_    \:::_ \ \\:\ \    \:::_ \ \
 echo    /: /     \::\ \    \::\ \   \:\/___/\    \:\ \ \ \\:\ \    \:(_) \ \ 
 echo   /::/___   _\::\ \__  \::\ \   \::___\/_    \:\ \ \ \\:\ \____\: ___\/ 
 echo  /_:/____/\/__\::\__/\  \::\ \   \:\____/\    \:\/. , ,\:\/___/\\ \ \   Made by Zeno Fluff
-echo  \_______\/\________\/   \__\/    \_____\/     \____/_/ \_____\/ \_\/ ZITE YT-DLP INTERFACE V1.2
+echo  \_______\/\________\/   \__\/    \_____\/     \____/_/ \_____\/ \_\/ ZITE YT-DLP INTERFACE V1.3
 echo.
 echo ==========================================================\
 echo   %date%   welcome to ZITE-DLP please select below
@@ -29,7 +29,7 @@ echo 6. FLAC Audio
 echo 7. WAV Audio
 echo 8. OGG Audio
 echo 9. M4A Audio
-echo 10 OPUS Audio
+echo 10. OPUS Audio
 echo  ---others---
 echo 11. Update YT-DLP
 echo 12. Update ZITE-DLP
@@ -37,7 +37,8 @@ echo 13.  Help / Info
 echo 14.    Debug
 echo.
 set /p choice=Select (1-14): 
-
+if /i "%choice%"=="exit" del /f /q cookies.txt 
+if /i "%choice%"=="exit" exit
 
 if "%choice%"=="1" set format=RVDMP4
 if "%choice%"=="2" set format=RVDMKV
@@ -52,7 +53,6 @@ if "%choice%"=="10" set format=RADOPUS
 if "%choice%"=="11" set format=UpdateYT-DLP
 if "%choice%"=="11" start "" "%format%.bat"
 if "%choice%"=="11" goto menu
-
 
 	
 if "%choice%"=="13" goto help
@@ -110,6 +110,8 @@ if %errorlevel%==0 (
 echo.
 set /p restart=Do you want to run another download? (Y/N): 
 if /i "%restart%"=="Y" goto menu
+else
+ del /f /q cookies.txt
 exit
 
 
@@ -132,26 +134,27 @@ echo - Run the corresponding batch file manually
 echo   (e.g., RVDMP4.bat for MP4 video)
 echo.
 echo Cookies:
-echo Make sure to put your cookies.txt in the 
-echo YT-DLP folder!
+echo ZITE-DLP will automatically delete your cookies
+echo upon exit and will grab them upon download.
 echo ----------------------------\
 echo ZITE-DLP made by Zeno Fluff!  \
 echo ===================== HELP =====================
 echo.
-pause
-goto menu
+
+set /p restart=Do you want to restart? (Y/N): 
+if /i "%restart%"=="Y" goto menu
+else
+ del /f /q cookies.txt
+exit
 
 :Debug
 setlocal enabledelayedexpansion
 echo ===================== DEBUG =====================
 echo --------------- ZITE DLP --------------------
-echo Zite-Dlp Version 1.2
+echo Zite-Dlp Version 1.3
 echo support for 10 formats
 echo OS Support windows 10 and 11
-
-
 echo --------------- ZITE DLP --------------------
-
 echo.
 echo --------------- System ----------------------
 echo GPU:
@@ -162,14 +165,8 @@ echo RAM:
 wmic memorychip get capacity
 echo system info:
 systeminfo | findstr /B /C:"OS Name" /C:"OS Version" /C:"System Type" /C:"Processor"
-
-
-
 echo --------------- System ----------------------
-
 echo.
-
-
 echo --------------- YT DLP ----------------------
 echo Testing yt-dlp...
 echo yt-dlp version-
@@ -233,5 +230,9 @@ echo --------------- Cookies --------------------
 
 
 echo ===================== DEBUG =====================
-pause
-goto menu
+
+set /p restart=Do you want to restart? (Y/N): 
+if /i "%restart%"=="Y" goto menu
+else
+ del /f /q cookies.txt
+exit
