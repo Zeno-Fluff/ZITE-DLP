@@ -24,8 +24,7 @@ It supports multiple formats, includes debug diagnostics, and is designed to be 
 ---
 
 ## Usage
-
-- Choose a format from the menu
+- Choose a format from the menu or type exit to close
 - Paste your link when prompted
 - The tool will simulate and download using yt-dlp
 - Files are saved in the `downloaded` folder
