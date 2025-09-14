@@ -12,7 +12,7 @@ echo \:::__\/ \__.::._\/\__.::.__\/\::::_\/_    \:::_ \ \\:\ \    \:::_ \ \
 echo    /: /     \::\ \    \::\ \   \:\/___/\    \:\ \ \ \\:\ \    \:(_) \ \ 
 echo   /::/___   _\::\ \__  \::\ \   \::___\/_    \:\ \ \ \\:\ \____\: ___\/ 
 echo  /_:/____/\/__\::\__/\  \::\ \   \:\____/\    \:\/. , ,\:\/___/\\ \ \   Made by Zeno Fluff
-echo  \_______\/\________\/   \__\/    \_____\/     \____/_/ \_____\/ \_\/ ZITE YT-DLP INTERFACE V1.3
+echo  \_______\/\________\/   \__\/    \_____\/     \____/_/ \_____\/ \_\/ ZITE YT-DLP INTERFACE V1.4
 echo.
 echo ==========================================================\
 echo   %date%   welcome to ZITE-DLP please select below
@@ -38,6 +38,7 @@ echo 14.    Debug
 echo.
 set /p choice=Select (1-14): 
 if /i "%choice%"=="exit" del /f /q cookies.txt 
+if /i "%choice%"=="exit" echo. > links.txt
 if /i "%choice%"=="exit" exit
 
 if "%choice%"=="1" set format=RVDMP4
@@ -50,9 +51,9 @@ if "%choice%"=="7" set format=RADWAV
 if "%choice%"=="8" set format=RADOGG
 if "%choice%"=="9" set format=RADM4A
 if "%choice%"=="10" set format=RADOPUS
-if "%choice%"=="11" set format=UpdateYT-DLP
-if "%choice%"=="11" start "" "%format%.bat"
+if "%choice%"=="11" start "" "UpdateYT-DLP.bat"
 if "%choice%"=="11" goto menu
+::if /i "%choice%"=="test" goto TEST
 
 	
 if "%choice%"=="13" goto help
@@ -73,7 +74,12 @@ if not defined format (
 
 )
 
-set /p link=Paste video/audio/playlist link: 
+
+set /p link=Paste Paste video/audio/playlist link:
+if /i "%choice%"=="exit" echo. > cookies.txt 
+if /i "%choice%"=="exit"  del /f /q links.txt
+if /i "%choice%"=="exit" exit
+
 
 set "basePath=%~dp0"
 set "ffmpegPath=%basePath%ffmpeg"
@@ -96,23 +102,17 @@ if %errorlevel%==0 (
     echo your Cookies were rotated by youtube. Deleting cookies.txt...
     del /f /q cookies.txt
     echo Please try again.
-    pause
-    goto menu
+    goto ENDRSTART
 ) else (
     echo %link% > links.txt
     echo Link valid.
     echo.
     echo Your files will be in the "downloaded" folder in the YT-DLP folder
     echo.
-    start "" "%format%.bat"
+    goto %format%
 )
 
 echo.
-set /p restart=Do you want to run another download? (Y/N): 
-if /i "%restart%"=="Y" goto menu
-else
- del /f /q cookies.txt
-exit
 
 
 :Help
@@ -128,10 +128,10 @@ echo Format codes:
 echo RVD = Run Video Download
 echo RAD = Run Audio Download
 echo.
-echo You can also skip the interface:
-echo - Paste your link into links.txt
-echo - Run the corresponding batch file manually
-echo   (e.g., RVDMP4.bat for MP4 video)
+echo Downloads:
+echo ZITE-DLP can only download one playlist, one video,
+echo or one audio download, at a time you can put mutiple
+echo videos in a playlist to download mutiple files.
 echo.
 echo Cookies:
 echo ZITE-DLP will automatically delete your cookies
@@ -141,17 +141,13 @@ echo ZITE-DLP made by Zeno Fluff!  \
 echo ===================== HELP =====================
 echo.
 
-set /p restart=Do you want to restart? (Y/N): 
-if /i "%restart%"=="Y" goto menu
-else
- del /f /q cookies.txt
-exit
+goto ENDRSTART
 
 :Debug
 setlocal enabledelayedexpansion
 echo ===================== DEBUG =====================
 echo --------------- ZITE DLP --------------------
-echo Zite-Dlp Version 1.3
+echo Zite-Dlp Version 1.4
 echo support for 10 formats
 echo OS Support windows 10 and 11
 echo --------------- ZITE DLP --------------------
@@ -231,8 +227,261 @@ echo --------------- Cookies --------------------
 
 echo ===================== DEBUG =====================
 
+goto ENDRSTART
+
+
+::formats
+
+:RVDMP4
+@echo off
+setlocal enabledelayedexpansion
+
+
+set "basePath=%~dp0"
+
+
+set "ffmpegPath=%basePath%ffmpeg"
+set "cookiesFile=%basePath%cookies.txt"
+set "downloadDir=%basePath%downloaded"
+set "linkFile=%basePath%links.txt"
+set "ytDlpExe=%basePath%yt-dlp.exe"
+
+cd /d "%downloadDir%"
+
+
+for /f "usebackq delims=" %%A in ("%linkFile%") do (
+    "%ytDlpExe%" -f bestvideo+bestaudio --no-part --no-continue --recode-video mp4 --ffmpeg-location "%ffmpegPath%" --cookies "%cookiesFile%" %%A
+)
+
+timeout /t 10 >nul
+goto ENDRSTART
+
+:RVDMKV
+@echo off
+setlocal enabledelayedexpansion
+
+
+set "basePath=%~dp0"
+
+
+set "ffmpegPath=%basePath%ffmpeg"
+set "cookiesFile=%basePath%cookies.txt"
+set "downloadDir=%basePath%downloaded"
+set "linkFile=%basePath%links.txt"
+set "ytDlpExe=%basePath%yt-dlp.exe"
+
+cd /d "%downloadDir%"
+
+
+for /f "usebackq delims=" %%A in ("%linkFile%") do (
+    "%ytDlpExe%" -f bestvideo+bestaudio --no-part --no-continue --recode-video mkv --ffmpeg-location "%ffmpegPath%" --cookies "%cookiesFile%" %%A
+)
+
+timeout /t 10 >nul
+goto ENDRSTART
+
+:RVDMOV
+@echo off
+setlocal enabledelayedexpansion
+
+
+set "basePath=%~dp0"
+
+
+set "ffmpegPath=%basePath%ffmpeg"
+set "cookiesFile=%basePath%cookies.txt"
+set "downloadDir=%basePath%downloaded"
+set "linkFile=%basePath%links.txt"
+set "ytDlpExe=%basePath%yt-dlp.exe"
+
+cd /d "%downloadDir%"
+
+
+for /f "usebackq delims=" %%A in ("%linkFile%") do (
+    "%ytDlpExe%" -f bestvideo+bestaudio --no-part --no-continue --recode-video mov --ffmpeg-location "%ffmpegPath%" --cookies "%cookiesFile%" %%A
+)
+
+timeout /t 10 >nul
+goto ENDRSTART
+
+:RVDWEBM
+@echo off
+setlocal enabledelayedexpansion
+
+
+set "basePath=%~dp0"
+
+
+set "ffmpegPath=%basePath%ffmpeg"
+set "cookiesFile=%basePath%cookies.txt"
+set "downloadDir=%basePath%downloaded"
+set "linkFile=%basePath%links.txt"
+set "ytDlpExe=%basePath%yt-dlp.exe"
+
+cd /d "%downloadDir%"
+
+
+for /f "usebackq delims=" %%A in ("%linkFile%") do (
+    "%ytDlpExe%" -f bestvideo+bestaudio --no-part --no-continue --recode-video webm --ffmpeg-location "%ffmpegPath%" --cookies "%cookiesFile%" %%A
+)
+
+timeout /t 10 >nul
+goto ENDRSTART
+
+:RADMP3
+@echo off
+setlocal enabledelayedexpansion
+
+set "basePath=%~dp0"
+
+
+set "ffmpegPath=%basePath%ffmpeg"
+set "cookiesFile=%basePath%cookies.txt"
+set "downloadDir=%basePath%downloaded"
+set "linkFile=%basePath%links.txt"
+set "ytDlpExe=%basePath%yt-dlp.exe"
+
+cd /d "%downloadDir%"
+
+
+for /f "usebackq delims=" %%A in ("%linkFile%") do (
+    "%ytDlpExe%" -x --no-part --no-continue --audio-format mp3 --ffmpeg-location "%ffmpegPath%" --cookies "%cookiesFile%" %%A
+)
+
+timeout /t 10 >nul
+goto ENDRSTART
+
+:RADFLAC
+@echo off
+setlocal enabledelayedexpansion
+
+
+set "basePath=%~dp0"
+
+
+set "ffmpegPath=%basePath%ffmpeg"
+set "cookiesFile=%basePath%cookies.txt"
+set "downloadDir=%basePath%downloaded"
+set "linkFile=%basePath%links.txt"
+set "ytDlpExe=%basePath%yt-dlp.exe"
+
+cd /d "%downloadDir%"
+
+for /f "usebackq delims=" %%A in ("%linkFile%") do (
+    "%ytDlpExe%" -x --no-part --no-continue --audio-format flac --ffmpeg-location "%ffmpegPath%" --cookies "%cookiesFile%" %%A
+)
+
+timeout /t 10 >nul
+goto ENDRSTART
+
+:RADWAV
+@echo off
+setlocal enabledelayedexpansion
+
+
+set "basePath=%~dp0"
+
+
+set "ffmpegPath=%basePath%ffmpeg"
+set "cookiesFile=%basePath%cookies.txt"
+set "downloadDir=%basePath%downloaded"
+set "linkFile=%basePath%links.txt"
+set "ytDlpExe=%basePath%yt-dlp.exe"
+
+cd /d "%downloadDir%"
+
+
+for /f "usebackq delims=" %%A in ("%linkFile%") do (
+    "%ytDlpExe%" -x --no-part --no-continue --audio-format wav --ffmpeg-location "%ffmpegPath%" --cookies "%cookiesFile%" %%A
+)
+
+timeout /t 10 >nul
+goto ENDRSTART
+
+:RADOGG
+@echo off
+setlocal enabledelayedexpansion
+
+
+set "basePath=%~dp0"
+
+
+set "ffmpegPath=%basePath%ffmpeg"
+set "cookiesFile=%basePath%cookies.txt"
+set "downloadDir=%basePath%downloaded"
+set "linkFile=%basePath%links.txt"
+set "ytDlpExe=%basePath%yt-dlp.exe"
+
+cd /d "%downloadDir%"
+
+
+for /f "usebackq delims=" %%A in ("%linkFile%") do (
+    "%ytDlpExe%" -x --no-part --no-continue --audio-format wav --ffmpeg-location "%ffmpegPath%" --cookies "%cookiesFile%" %%A
+)
+
+
+for %%F in (*.wav) do (
+    "%ffmpegPath%\ffmpeg.exe" -i "%%F" "%%~nF.ogg"
+    del "%%F"
+)
+
+timeout /t 10 >nul
+goto ENDRSTART
+
+:RADM4A
+@echo off
+setlocal enabledelayedexpansion
+
+set "basePath=%~dp0"
+
+
+set "ffmpegPath=%basePath%ffmpeg"
+set "cookiesFile=%basePath%cookies.txt"
+set "downloadDir=%basePath%downloaded"
+set "linkFile=%basePath%links.txt"
+set "ytDlpExe=%basePath%yt-dlp.exe"
+
+cd /d "%downloadDir%"
+
+
+for /f "usebackq delims=" %%A in ("%linkFile%") do (
+    "%ytDlpExe%" -x --no-part --no-continue --audio-format m4a --ffmpeg-location "%ffmpegPath%" --cookies "%cookiesFile%" %%A
+)
+
+timeout /t 10 >nul
+goto ENDRSTART
+
+:RADOPUS
+@echo off
+setlocal enabledelayedexpansion
+
+set "basePath=%~dp0"
+
+
+set "ffmpegPath=%basePath%ffmpeg"
+set "cookiesFile=%basePath%cookies.txt"
+set "downloadDir=%basePath%downloaded"
+set "linkFile=%basePath%links.txt"
+set "ytDlpExe=%basePath%yt-dlp.exe"
+
+cd /d "%downloadDir%"
+
+
+for /f "usebackq delims=" %%A in ("%linkFile%") do (
+    "%ytDlpExe%" -x --no-part --no-continue --audio-format opus --ffmpeg-location "%ffmpegPath%" --cookies "%cookiesFile%" %%A
+)
+
+timeout /t 10 >nul
+goto ENDRSTART
+
+
+:ENDRSTART
+set "basePath=%~dp0"
 set /p restart=Do you want to restart? (Y/N): 
-if /i "%restart%"=="Y" goto menu
+timeout /t 2 >nul
+if /i "%restart%"=="Y" start "" "%basepath%ZITEDLPCLI.bat" 
+if /i "%restart%"=="Y" exit
 else
- del /f /q cookies.txt
+echo. > "%basepath%cookies.txt"
 exit
+
