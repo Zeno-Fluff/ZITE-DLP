@@ -1,5 +1,5 @@
 # ZITE DLP
- 
+
 ZITE DLP is a modular CLI tool for downloading and organizing media using yt-dlp.  
 It supports multiple formats, includes debug diagnostics, and is designed to be portable and easy to use.
 
