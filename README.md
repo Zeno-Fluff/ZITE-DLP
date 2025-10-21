@@ -1,5 +1,6 @@
 <img width="1000" height="1414" alt="ZITE" src="https://github.com/user-attachments/assets/2acf3c08-d9f3-42c6-9302-fd7eb62dc2e5" />
 
+Planned continuation, January 7th 2026
 # ZITE DLP
 
 ZITE DLP is a modular CLI tool for downloading and organizing media using yt-dlp.  
